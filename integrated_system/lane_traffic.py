@@ -63,7 +63,10 @@ def main():
       objs = engine.DetectWithImage(image, threshold=0.1, keep_aspect_ratio=True, relative_coord=True, top_k=5)
       end_time = time.monotonic()
       angles = input_output(image)
-      #print(angles)
+      if (angles == False):
+          print ("no angles found)
+      else:
+          print(angles)
       text_lines = [
           'Inference: %.2f ms' %((end_time - start_time) * 1000),
           'FPS: %.2f fps' %(1.0/(end_time - last_time)),

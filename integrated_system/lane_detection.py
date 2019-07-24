@@ -54,8 +54,8 @@ def average_slope_intercept(frame, line_segments):
     """
     lane_lines = []
     if line_segments is None:
-        logging.info('No line_segment segments detected')
-        return lane_lines
+        print('No line_segment segments detected')
+        return False
 
     height, width, _ = frame.shape
     left_fit = []
@@ -68,7 +68,7 @@ def average_slope_intercept(frame, line_segments):
     for line_segment in line_segments:
         for x1, y1, x2, y2 in line_segment:
             if x1 == x2:
-                logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
+                print('skipping vertical line segment (slope=inf): %s' % line_segment)
                 continue
             fit = np.polyfit((x1, x2), (y1, y2), 1)
             slope = fit[0]
@@ -87,8 +87,6 @@ def average_slope_intercept(frame, line_segments):
     right_fit_average = np.average(right_fit, axis=0)
     if len(right_fit) > 0:
         lane_lines.append(make_points(frame, right_fit_average))
-
-    #logging.debug('lane lines: %s' % lane_lines)  # [[[316, 720, 484, 432]], [[1009, 720, 718, 432]]]
 
     return lane_lines
 
@@ -190,18 +188,19 @@ def input_output(image):
 
 
 	lane_lines_image = average_slope_intercept(raw_image, lines_segments_image)
-	#print (lane_lines_image)
-
-	slopes_image = slopes(lane_lines_image)
-	#print (slopes_image)
-
-
-	line_offset = middle_line(raw_image, lane_lines_image)
-	#print (line_offset)
+	if (lane_lines_image == False):
+		return False
+	else:
+		slopes_image = slopes(lane_lines_image)
+		#print (slopes_image)
 
 
-	degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
-	end = time.time()
-	print (end - start)
-	print (degrees)
-	return degrees
+		line_offset = middle_line(raw_image, lane_lines_image)
+		#print (line_offset)
+
+
+		degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
+		end = time.time()
+		print (end - start)
+		print (degrees)
+		return degrees
