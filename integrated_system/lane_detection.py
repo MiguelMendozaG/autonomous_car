@@ -182,6 +182,7 @@ def input_output(image):
 	lower_blue = np.array([60, 40, 40])
 	upper_blue = np.array([150, 255, 255])
 	mask = cv.inRange(hsv_image, lower_blue, upper_blue)
+	mask_save = cv.imwrite('mask.png', mask)
 	#plt.imshow(mask)
 
 	edges = cv.Canny(mask, 200, 400)
