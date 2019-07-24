@@ -20,6 +20,8 @@ import imp
 import os
 from edgetpu.detection.engine import DetectionEngine
 import gstreamer
+from lane_detection import input_output
+
 
 def load_labels(path):
     p = re.compile(r'\s*(\d+)(.+)')
@@ -60,6 +62,8 @@ def main():
       start_time = time.monotonic()
       objs = engine.DetectWithImage(image, threshold=0.1, keep_aspect_ratio=True, relative_coord=True, top_k=5)
       end_time = time.monotonic()
+      angles = input_output(image)
+      print(angles)
       text_lines = [
           'Inference: %.2f ms' %((end_time - start_time) * 1000),
           'FPS: %.2f fps' %(1.0/(end_time - last_time)),
