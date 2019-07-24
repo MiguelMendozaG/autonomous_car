@@ -63,7 +63,7 @@ def main():
       objs = engine.DetectWithImage(image, threshold=0.1, keep_aspect_ratio=True, relative_coord=True, top_k=5)
       end_time = time.monotonic()
       angles = input_output(image)
-      print(angles)
+      #print(angles)
       text_lines = [
           'Inference: %.2f ms' %((end_time - start_time) * 1000),
           'FPS: %.2f fps' %(1.0/(end_time - last_time)),
@@ -71,7 +71,7 @@ def main():
       #print(' '.join(text_lines))
       last_time = end_time
       generate_svg(svg_canvas, objs, labels, text_lines)
-      print(type(image))
+      #print(type(image))
 
     result = gstreamer.run_pipeline(user_callback)
 

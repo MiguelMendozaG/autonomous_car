@@ -1,3 +1,4 @@
+import numpy as np
 import time
 import math
 import cv2 as cv
@@ -104,7 +105,7 @@ def display_lines(frame, lines, line_color=(0, 255, 0), line_width=2):
     return frame
 
 
-display_image = display_lines(raw_image, lane_lines_image)
+#display_image = display_lines(raw_image, lane_lines_image)
 #plt.imshow(display_image)
 
 
@@ -157,7 +158,6 @@ def add_central_line(frame, lines, line_color=(0, 0, 255), line_width=2):
     return frame
 
 def get_output_angle(image, x1,y1,x2,y2):
-    image = 
     num = y2 - y1
     den = x1 - x2
     if den == 0:
@@ -169,8 +169,8 @@ def get_output_angle(image, x1,y1,x2,y2):
 
 def input_output(image):
 	start = time.time()
-	raw_image = image
-	hsv_image = cv.cvtColor(raw_image, cv.COLOR_BGR2HSV)
+	raw_image = np.array(image)
+	hsv_image = cv.cvtColor(raw_image, cv.COLOR_RGB2HSV)
 	#plt.imshow(hsv_image)
 
 
