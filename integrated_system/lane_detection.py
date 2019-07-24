@@ -195,11 +195,11 @@ def input_output(image):
 		return False
 	else:
 		slopes_image = slopes(lane_lines_image)
-		#print (slopes_image)
+		print (slopes_image)
 
 
 		line_offset = middle_line(raw_image, lane_lines_image)
-		#print (line_offset)
+		print ("line offset", line_offset)
 
 
 		degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
