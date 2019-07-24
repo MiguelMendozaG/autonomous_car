@@ -173,9 +173,9 @@ def input_output(image):
 	raw_image = np.array(image)
 	status = cv.imwrite('output_raw.png', raw_image)
 	rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
-	stratus_rgb = cv.imwrite('output_rgb.png', rgb_image)
-	hsv_image = cv.cvtColor(raw_image, cv.COLOR_BGR2HSV)
-	status2 = cv.imwrite('output_hsv.png', hsv_image)
+	#stratus_rgb = cv.imwrite('output_rgb.png', rgb_image)
+	hsv_image = cv.cvtColor(rgb_image, cv.COLOR_RGB2HSV)
+	status2 = cv.imwrite('output_hsv_.png', hsv_image)
 	#plt.imshow(hsv_image)
 
 
