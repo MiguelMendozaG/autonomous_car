@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
+import cv2 as cv
 import time
 import re
 import svgwrite
@@ -47,8 +47,8 @@ def generate_svg(dwg, objs, labels, text_lines):
                         fill='red', fill_opacity=0.3, stroke='white'))
 
 def main():
-    model = '../road_signs_quantized_v2_edgetpu.tflite'
-    labels = '../road_sign_labels.txt'
+    model = '../traffic_sign_detection/road_signs_quantized_v2_edgetpu.tflite'
+    labels = '../traffic_sign_detection/road_sign_labels.txt'
 
     print("Loading %s with %s labels."%(model, labels))
     engine = DetectionEngine(model)
@@ -58,15 +58,16 @@ def main():
     def user_callback(image, svg_canvas):
       nonlocal last_time
       start_time = time.monotonic()
-      objs = engine.DetectWithImage(image, threshold=args.threshold, keep_aspect_ratio=True, relative_coord=True, top_k=args.top_k)
+      objs = engine.DetectWithImage(image, threshold=0.1, keep_aspect_ratio=True, relative_coord=True, top_k=5)
       end_time = time.monotonic()
       text_lines = [
           'Inference: %.2f ms' %((end_time - start_time) * 1000),
           'FPS: %.2f fps' %(1.0/(end_time - last_time)),
       ]
-      print(' '.join(text_lines))
+      #print(' '.join(text_lines))
       last_time = end_time
       generate_svg(svg_canvas, objs, labels, text_lines)
+      print(type(image))
 
     result = gstreamer.run_pipeline(user_callback)
 
