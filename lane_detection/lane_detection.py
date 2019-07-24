@@ -1,8 +1,11 @@
+import time
+import math
 import cv2 as cv
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import numpy as np
 
-raw_image = cv.imread(model_dir + 'fotos/road3_240x320.png')
+start = time.time()
+raw_image = cv.imread('data/road2_240x320.png')
 hsv_image = cv.cvtColor(raw_image, cv.COLOR_BGR2HSV)
 #plt.imshow(hsv_image)
 
@@ -53,6 +56,17 @@ def detect_line_segments(cropped_edges):
 lines_segments_image = detect_line_segments(croped_image)
 #print(lines_segments_image)
 
+
+def make_points(frame, line):
+    height, width, _ = frame.shape
+    slope, intercept = line
+    y1 = height  # bottom of the frame
+    y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
+
+    # bound the coordinates within the frame
+    x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
+    x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
+    return [[x1, y1, x2, y2]]
 
 def average_slope_intercept(frame, line_segments):
     """
@@ -175,8 +189,20 @@ def add_central_line(frame, lines, line_color=(0, 0, 255), line_width=2):
     #line_image = cv.addWeighted(frame, 0.8, line_image, 1, 1)
     return frame
 
-
+def get_output_angle(x1,y1,x2,y2):
+    num = y2 - y1
+    den = x1 - x2
+    if den == 0:
+      return 90
+    degrees = math.degrees(math.atan(num / den))
+    return degrees
 
 line_offset = middle_line(raw_image, lane_lines_image)
 print (line_offset)
+
+
+degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
+end = time.time()
+print (end - start)
+print (degrees)
 
