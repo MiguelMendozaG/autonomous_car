@@ -171,11 +171,11 @@ def get_output_angle(image, x1,y1,x2,y2 = 123456789):
 def input_output(image):
 	start = time.time()
 	raw_image = np.array(image)
-	status = cv.imwrite('output_raw.png', raw_image)
+	#status = cv.imwrite('output_raw.png', raw_image)
 	rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
 	#stratus_rgb = cv.imwrite('output_rgb.png', rgb_image)
 	hsv_image = cv.cvtColor(rgb_image, cv.COLOR_RGB2HSV)
-	status2 = cv.imwrite('output_hsv_.png', hsv_image)
+	#status2 = cv.imwrite('output_hsv_.png', hsv_image)
 	#plt.imshow(hsv_image)
 
 
@@ -205,6 +205,9 @@ def input_output(image):
 
 		line_offset = middle_line(raw_image, lane_lines_image)
 		print ("line offset", line_offset)
+
+		central_line = add_central_line(rgb_image, line_offset)
+		central_image = cv.imwrite('central_image.png', central_line)
 
 
 		degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
