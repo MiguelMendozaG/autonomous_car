@@ -68,7 +68,7 @@ def average_slope_intercept(frame, line_segments):
     for line_segment in line_segments:
         for x1, y1, x2, y2 in line_segment:
             if x1 == x2:
-                print('skipping vertical line segment (slope=inf): %s' % line_segment)
+                #print('skipping vertical line segment (slope=inf): %s' % line_segment)
                 continue
             fit = np.polyfit((x1, x2), (y1, y2), 1)
             slope = fit[0]
@@ -112,7 +112,7 @@ def slopes(lines):
         m = []
         for line in lines:
             for x1, y1, x2, y2 in line:
-                print ("x1: ", x1,", y1: ", y1, ", x2: ", x2, ", y2: ", y2)
+                #print ("x1: ", x1,", y1: ", y1, ", x2: ", x2, ", y2: ", y2)
                 slope_1 = (y2 - y1) / (x2- x1)
                 m.append(slope_1)  
   return m
@@ -155,13 +155,16 @@ def add_central_line(frame, lines, line_color=(0, 0, 255), line_width=2):
     #line_image = cv.addWeighted(frame, 0.8, line_image, 1, 1)
     return frame
 
-def get_output_angle(image, x1,y1,x2,y2):
-    num = y2 - y1
-    den = x1 - x2
-    if den == 0:
-      return 90
-    degrees = math.degrees(math.atan(num / den))
-    return degrees
+def get_output_angle(image, x1,y1,x2,y2 = 123456789):
+    if (y2 == 123456789):
+      return False
+    else:
+      num = y2 - y1
+      den = x1 - x2
+      if den == 0:
+        return 90
+      degrees = math.degrees(math.atan(num / den))
+      return degrees
 
 
 
@@ -200,7 +203,10 @@ def input_output(image):
 
 
 		degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
-		end = time.time()
-		print (end - start)
-		print (degrees)
-		return degrees
+		if (degrees == False):
+		   print ("Degrees are false")
+		else:
+		   end = time.time()
+		   print (end - start)
+		   print (degrees)
+		   return degrees
