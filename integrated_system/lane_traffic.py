@@ -70,7 +70,7 @@ def main():
       #print(' '.join(text_lines))
       last_time = end_time
       generate_svg(svg_canvas, objs, labels, text_lines)
-      status = cv.imwrite('output_image.png', np.array(image))
+      #status = cv.imwrite('output_image.png', np.array(image))
       angles = input_output(image)
       if (angles == False):
           print ("no angles found")
