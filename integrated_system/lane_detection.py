@@ -155,37 +155,35 @@ def add_central_line(frame, lines, line_color=(0, 0, 255), line_width=2):
     #line_image = cv.addWeighted(frame, 0.8, line_image, 1, 1)
     return frame
 
-def get_output_angle(image, x1,y1,x2,y2 = 123456789):
-    if (y2 == 123456789):
-      return False
-    else:
-      num = y2 - y1
-      den = x1 - x2
-      if den == 0:
-        return 90
-      degrees = math.degrees(math.atan(num / den))
-      return degrees
+def get_output_angle(x1,y1,x2,y2):
+	num = y2 - y1
+	den = x1 - x2
+	if den == 0:
+		return 90
+	degrees = math.degrees(math.atan(num / den))
+	return degrees
 
 
 
 def input_output(image):
 	start = time.time()
 	raw_image = np.array(image.convert('RGB'))
-	status = cv.imwrite('output_raw.png', raw_image)
-	rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
-	stratus_rgb = cv.imwrite('output_rgb.png', rgb_image)
-	hsv_image = cv.cvtColor(rgb_image, cv.COLOR_RGB2HSV)
+	#status = cv.imwrite('output_raw.png', raw_image)
+	#rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
+	#stratus_rgb = cv.imwrite('output_rgb.png', rgb_image)
+	hsv_image = cv.cvtColor(raw_image, cv.COLOR_RGB2HSV)
 	#status2 = cv.imwrite('output_hsv_.png', hsv_image)
 	#plt.imshow(hsv_image)
 
 
+	gauss = cv.GaussianBlur(hsv_image, (5,5), 0)
 	lower_blue = np.array([60, 40, 40])
 	upper_blue = np.array([150, 255, 255])
-	mask = cv.inRange(hsv_image, lower_blue, upper_blue)
+	mask = cv.inRange(gauss, lower_blue, upper_blue)
 	mask_save = cv.imwrite('mask.png', mask)
 	#plt.imshow(mask)
 
-	edges = cv.Canny(mask, 200, 400)
+	edges = cv.Canny(mask, 50, 100, 3)
 	#plt.imshow(edges)
 
 	croped_image = region_of_interest(edges)
@@ -197,17 +195,18 @@ def input_output(image):
 
 	lane_lines_image = average_slope_intercept(raw_image, lines_segments_image)
 	if (lane_lines_image == False):
+		print("lane lines image is false")
 		return False
 	else:
 		slopes_image = slopes(lane_lines_image)
-		print (slopes_image)
+		#print (slopes_image)
 
 
 		line_offset = middle_line(raw_image, lane_lines_image)
-		print ("line offset", line_offset)
+		#print ("line offset", line_offset)
 
 		central_line = add_central_line(raw_image, line_offset)
-		central_image = cv.imwrite('central_image.png', central_line)
+		#central_image = cv.imwrite('central_image.png', central_line)
 
 
 		degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
