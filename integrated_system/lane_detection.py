@@ -126,7 +126,7 @@ def middle_line(frame, lane_lines):
     height, width, _ = frame.shape
     if len(lane_lines) == 1:
         x1, _, x2, _ = lane_lines[0][0]
-        x_offset = x2 - x1
+        x_offset = x2 +abs(x1)
     else:
         _, _, left_x2, _ = lane_lines[0][0]
         _, _, right_x2, _ = lane_lines[1][0]
@@ -163,21 +163,44 @@ def get_output_angle(x1,y1,x2,y2):
 	degrees = math.degrees(math.atan(num / den))
 	return degrees
 
+def angle_to_correc(angle):
+    correction_max = 0
 
+    if angle < 0: #negative angle indicates a left turn
+      correction = -(90 + angle)
+      
+      if correction < -15:
+        correction_max = -14
+        
+      else:
+        correction_max = correction * 0.9
+      
+      return correction_max
+      
+    else:  #positive angle indicates a right turn
+      correction = 90 - angle
+      
+      if correction > 15:
+        correction_max = 14
+      
+      else:
+        correction_max = correction_max * 0.9
+        
+      return correction_max
 
 def input_output(image):
 	start = time.time()
 	raw_image = np.array(image.convert('RGB'))
 	#status = cv.imwrite('output_raw.png', raw_image)
-	rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
-	stratus_rgb = cv.imwrite('output_rgb_left_2.png', rgb_image)
+	#rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
+	#stratus_rgb = cv.imwrite('output_rgb_left_2.png', rgb_image)
 	hsv_image = cv.cvtColor(raw_image, cv.COLOR_RGB2HSV)
 	#status2 = cv.imwrite('output_hsv_.png', hsv_image)
 	#plt.imshow(hsv_image)
 
 
 	gauss = cv.GaussianBlur(hsv_image, (5,5), 0)
-	lower_blue = np.array([60, 40, 40])
+	lower_blue = np.array([60, 80,80])
 	upper_blue = np.array([150, 255, 255])
 	mask = cv.inRange(gauss, lower_blue, upper_blue)
 	#mask_save = cv.imwrite('mask.png', mask)
@@ -214,6 +237,7 @@ def input_output(image):
 		   print ("Degrees are false")
 		else:
 		   end = time.time()
+		   output_angle = angle_to_correc(degrees)
 		   #print (end - start)
 		   #print (degrees)
-		   return degrees
+		   return output_angle
