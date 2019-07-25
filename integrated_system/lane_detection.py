@@ -13,8 +13,8 @@ def region_of_interest(edges):
 
     # only focus bottom half of the screen
     polygon = np.array([[
-        (0, height * 1 / 2),
-        (width, height * 1 / 2),
+        (0, height * 2/3),
+        (width, height * 2/3),
         (width, height),
         (0, height),
     ]], np.int32)
@@ -97,7 +97,7 @@ def display_lines(frame, lines, line_color=(0, 255, 0), line_width=2):
         for line in lines:
             for x1, y1, x2, y2 in line:  
                 cv.line(frame, (x1, y1), (x2, y2), line_color, line_width)
-                print (x1, y1, x2, y2)
+                #print (x1, y1, x2, y2)
     #plt.imshow(frame)
     #line_image = cv.addWeighted(frame, 0.8, line_image, 1, 1)
     return frame
@@ -150,7 +150,7 @@ def add_central_line(frame, lines, line_color=(0, 0, 255), line_width=2):
     x1, y1, x2, y2 = lines
     if lines is not None:
           cv.line(frame, (x1, y1), (x2, y2), line_color, line_width)
-          print (x1, y1, x2, y2)
+          #print (x1, y1, x2, y2)
     #plt.imshow(frame)
     #line_image = cv.addWeighted(frame, 0.8, line_image, 1, 1)
     return frame
@@ -169,8 +169,8 @@ def input_output(image):
 	start = time.time()
 	raw_image = np.array(image.convert('RGB'))
 	#status = cv.imwrite('output_raw.png', raw_image)
-	#rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
-	#stratus_rgb = cv.imwrite('output_rgb.png', rgb_image)
+	rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
+	stratus_rgb = cv.imwrite('output_rgb_left_2.png', rgb_image)
 	hsv_image = cv.cvtColor(raw_image, cv.COLOR_RGB2HSV)
 	#status2 = cv.imwrite('output_hsv_.png', hsv_image)
 	#plt.imshow(hsv_image)
@@ -180,7 +180,7 @@ def input_output(image):
 	lower_blue = np.array([60, 40, 40])
 	upper_blue = np.array([150, 255, 255])
 	mask = cv.inRange(gauss, lower_blue, upper_blue)
-	mask_save = cv.imwrite('mask.png', mask)
+	#mask_save = cv.imwrite('mask.png', mask)
 	#plt.imshow(mask)
 
 	edges = cv.Canny(mask, 50, 100, 3)
@@ -214,6 +214,6 @@ def input_output(image):
 		   print ("Degrees are false")
 		else:
 		   end = time.time()
-		   print (end - start)
-		   print (degrees)
+		   #print (end - start)
+		   #print (degrees)
 		   return degrees
