@@ -68,7 +68,7 @@ def average_slope_intercept(frame, line_segments):
     for line_segment in line_segments:
         for x1, y1, x2, y2 in line_segment:
             if x1 == x2:
-                #print('skipping vertical line segment (slope=inf): %s' % line_segment)
+                print('skipping vertical line segment (slope=inf): %s' % line_segment)
                 continue
             fit = np.polyfit((x1, x2), (y1, y2), 1)
             slope = fit[0]
@@ -112,7 +112,7 @@ def slopes(lines):
         m = []
         for line in lines:
             for x1, y1, x2, y2 in line:
-                #print ("x1: ", x1,", y1: ", y1, ", x2: ", x2, ", y2: ", y2)
+                print ("x1: ", x1,", y1: ", y1, ", x2: ", x2, ", y2: ", y2)
                 slope_1 = (y2 - y1) / (x2- x1)
                 m.append(slope_1)  
   return m
@@ -156,7 +156,7 @@ def add_central_line(frame, lines, line_color=(0, 0, 255), line_width=2):
     return frame
 
 def get_output_angle(image, x1,y1,x2,y2 = 123456789):
-    if (y2 == 123456789):
+    if y2 == 1234567890:
       return False
     else:
       num = y2 - y1
@@ -164,25 +164,21 @@ def get_output_angle(image, x1,y1,x2,y2 = 123456789):
       if den == 0:
         return 90
       degrees = math.degrees(math.atan(num / den))
-      return degrees
+      return degrees    else:
+      return False
 
 
 
 def input_output(image):
 	start = time.time()
-	raw_image = np.array(image.convert('RGB'))
-	status = cv.imwrite('output_raw.png', raw_image)
-	#rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
-	#stratus_rgb = cv.imwrite('output_rgb.png', rgb_image)
+	raw_image = np.array(image)
 	hsv_image = cv.cvtColor(raw_image, cv.COLOR_RGB2HSV)
-	#status2 = cv.imwrite('output_hsv_.png', hsv_image)
 	#plt.imshow(hsv_image)
 
 
 	lower_blue = np.array([60, 40, 40])
 	upper_blue = np.array([150, 255, 255])
 	mask = cv.inRange(hsv_image, lower_blue, upper_blue)
-	mask_save = cv.imwrite('mask.png', mask)
 	#plt.imshow(mask)
 
 	edges = cv.Canny(mask, 200, 400)
@@ -200,14 +196,11 @@ def input_output(image):
 		return False
 	else:
 		slopes_image = slopes(lane_lines_image)
-		print (slopes_image)
+		#print (slopes_image)
 
 
 		line_offset = middle_line(raw_image, lane_lines_image)
-		print ("line offset", line_offset)
-
-		central_line = add_central_line(raw_image, line_offset)
-		central_image = cv.imwrite('central_image.png', central_line)
+		#print (line_offset)
 
 
 		degrees = get_output_angle (line_offset[0], line_offset[1] , line_offset[2], line_offset[3])
