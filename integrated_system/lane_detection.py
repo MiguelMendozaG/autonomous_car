@@ -114,7 +114,7 @@ def slopes(lines):
             for x1, y1, x2, y2 in line:
                 #print ("x1: ", x1,", y1: ", y1, ", x2: ", x2, ", y2: ", y2)
                 slope_1 = (y2 - y1) / (x2- x1)
-                m.append(slope_1)  
+                m.append(slope_1)
   return m
 
 
@@ -134,14 +134,12 @@ def middle_line(frame, lane_lines):
         ##mid = int(width / 2 * (1 + camera_mid_offset_percent))
         mid = int(width / 2 )
         x_offset = (left_x2 + right_x2) / 2 #- mid
-        
+
     x_offset = int(x_offset)
     y_offset = int(height / 2)
     x_init = int(width / 2)
     y_init = int(height)
-    
-    
-    
+
     return x_offset, y_offset, x_init, y_init
 
 
@@ -168,15 +166,14 @@ def angle_to_correc(angle):
 
     if angle < 0: #negative angle indicates a left turn
       correction = -(90 + angle)
-      
+
       if correction < -15:
         correction_max = -14
-        
       else:
         correction_max = correction * 0.9
-      
+
       return correction_max
-      
+
     else:  #positive angle indicates a right turn
       correction = 90 - angle
       
@@ -192,7 +189,7 @@ def input_output(image):
 	start = time.time()
 	raw_image = np.array(image.convert('RGB'))
 	#status = cv.imwrite('output_raw.png', raw_image)
-	#rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
+	rgb_image = cv.cvtColor(raw_image, cv.COLOR_BGR2RGB)
 	#stratus_rgb = cv.imwrite('output_rgb_left_2.png', rgb_image)
 	hsv_image = cv.cvtColor(raw_image, cv.COLOR_RGB2HSV)
 	#status2 = cv.imwrite('output_hsv_.png', hsv_image)
@@ -206,7 +203,7 @@ def input_output(image):
 	#mask_save = cv.imwrite('mask.png', mask)
 	#plt.imshow(mask)
 
-	edges = cv.Canny(mask, 50, 100, 3)
+	edges = cv.Canny(mask, 200,400, 3)
 	#plt.imshow(edges)
 
 	croped_image = region_of_interest(edges)
@@ -219,6 +216,7 @@ def input_output(image):
 	lane_lines_image = average_slope_intercept(raw_image, lines_segments_image)
 	if (lane_lines_image == False):
 		print("lane lines image is false")
+		stratus_rgb = cv.imwrite("angle_not_found.png", rgb_image)
 		return False
 	else:
 		slopes_image = slopes(lane_lines_image)

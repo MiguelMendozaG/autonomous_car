@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from periphery import SPI
 import numpy as np
 import cv2 as cv
 import time
@@ -22,6 +23,9 @@ import os
 from edgetpu.detection.engine import DetectionEngine
 import gstreamer
 from lane_detection import input_output
+
+angles = 0
+traffic_sign = 0
 
 
 def load_labels(path):
@@ -44,7 +48,8 @@ def generate_svg(dwg, objs, labels, text_lines):
         x, y, w, h = int(x * width), int(y * height), int(w * width), int(h * height)
         percent = int(100 * obj.score)
         label = '%d%% %s' % (percent, labels[obj.label_id])
-        #print (label, percent)
+        traffic_sign = obj.label_id
+        #print (obj.label_id)
         shadow_text(dwg, x, y - 5, label)
         dwg.add(dwg.rect(insert=(x,y), size=(w, h),
                         fill='red', fill_opacity=0.3, stroke='white'))
@@ -75,9 +80,11 @@ def main():
       if (angles == False):
           print ("no angles found")
       else:
-          print(angles)
-
+          #continue
+          print (angles, traffic_sign)
+    
     result = gstreamer.run_pipeline(user_callback)
+    
 
 if __name__ == '__main__':
     main()
