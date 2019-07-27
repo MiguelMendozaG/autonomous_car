@@ -1,5 +1,3 @@
-#!/home/mendel/.virtualenvs/cv/bin/python
-
 import numpy as np
 import cv2 as cv
 import time
@@ -7,10 +5,11 @@ import re
 import svgwrite
 import imp
 import os
-from periphery import Serial
+#from periphery import Serial
 from edgetpu.detection.engine import DetectionEngine
 import gstreamer
 from lane_detection import input_output
+from uart import output_uart
 
 
 #uart3 = Serial("/dev/ttymxc2", 9600)
@@ -68,7 +67,8 @@ def main():
       last_time = end_time
       generate_svg(svg_canvas, objs, labels, text_lines)
       #status = cv.imwrite('output_image.png', np.array(image))
-      #angles = input_output(image)
+      output_uart()
+      angles = input_output(image)
       if (angles == False):
           print ("no angles found")
       else:
