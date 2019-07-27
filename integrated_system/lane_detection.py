@@ -216,7 +216,7 @@ def input_output(image):
 	lane_lines_image = average_slope_intercept(raw_image, lines_segments_image)
 	if (lane_lines_image == False):
 		print("lane lines image is false")
-		stratus_rgb = cv.imwrite("angle_not_found.png", rgb_image)
+		#stratus_rgb = cv.imwrite("angle_not_found.png", rgb_image)
 		return False
 	else:
 		slopes_image = slopes(lane_lines_image)
