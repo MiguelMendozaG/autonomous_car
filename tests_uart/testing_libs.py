@@ -11,3 +11,9 @@ import imp
 import os
 from edgetpu.detection.engine import DetectionEngine
 import gstreamer
+
+
+uart3 = Serial("/dev/ttymxc2", 9600)
+
+
+uart3.write(b'popo')

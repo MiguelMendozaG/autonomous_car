@@ -99,7 +99,6 @@ def run_pipeline(user_function,
         overlay=overlay, screen_size = src_size,
         appsink_size=appsink_size, user_function=user_function))
     loop = GObject.MainLoop()
-
     # Set up a pipeline bus watch to catch errors.
     bus = pipeline.get_bus()
     bus.add_signal_watch()

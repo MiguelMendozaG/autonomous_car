@@ -1,9 +1,12 @@
+#!/home/mendel/.virtualenvs/cv/bin/python
 import time
 import math
 import cv2 as cv
+from periphery import Serial
 #from matplotlib import pyplot as plt
 import numpy as np
 
+uart3 = Serial("/dev/ttymxc2", 9600)
 start = time.time()
 raw_image = cv.imread('data/road2_240x320.png')
 hsv_image = cv.cvtColor(raw_image, cv.COLOR_BGR2HSV)
@@ -206,3 +209,4 @@ end = time.time()
 print (end - start)
 print (degrees)
 
+uart3.write(b"Altranos")

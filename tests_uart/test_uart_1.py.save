@@ -1,7 +1,6 @@
 #!/home/mendel/.virtualenvs/cv/bin/python
 import cv2 as cv
-import time
-from periphery import Serial
+from per}iphery import Serial
 
 
 serial = Serial("/dev/ttymxc2", 9600)
@@ -9,6 +8,6 @@ serial = Serial("/dev/ttymxc2", 9600)
 #pwm = PWM(0, 0)
 
 while(1):
-    time.sleep(5)
-    serial.write(b"2!")
+    
     print ("2")
+	
